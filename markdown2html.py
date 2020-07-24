@@ -18,6 +18,7 @@ def func():
         exit(1)
     with open(md_file) as md_lines, open(html_file, 'w') as html:
         unordered_list_level = 0
+        ordered_list_level = 0
         for line in md_lines:
             heading_level = 0
             # Heading h1 to h6 conversion
@@ -39,15 +40,26 @@ def func():
                     unordered_list_level = 1
                     html.write('<ul>\n')
                 html.write('<li>\n{}</li>\n'.format(line[2:]))
-            elif not line.startswith('- ') and unordered_list_level == 1:
-                unordered_list_level = 0
-                html.write('</ul>\n')
+            # Ordered list conversion
+            elif line.startswith('* '):
+                if ordered_list_level == 0:
+                    ordered_list_level = 1
+                    html.write('<ol>\n')
+                html.write('<li>\n{}</li>\n'.format(line[2:]))
             # Normal line
             else:
+                if unordered_list_level == 1:
+                    unordered_list_level = 0
+                    html.write('</ul>\n')
+                elif ordered_list_level == 1:
+                    ordered_list_level = 0
+                    html.write('</ol>\n')
                 html.write(line)
-    if (unordered_list_level == 1):
-        with open(html_file, 'a') as html:
+    with open(html_file, 'a') as html:
+        if (unordered_list_level == 1):
             html.write('</ul>\n')
+        elif (ordered_list_level == 1):
+            html.write('</ol>\n')
     exit(0)
 
 
