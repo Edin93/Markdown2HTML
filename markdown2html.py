@@ -17,21 +17,37 @@ def func():
         stderr.write('Missing {}\n'.format(md_file))
         exit(1)
     with open(md_file) as md_lines, open(html_file, 'w') as html:
+        unordered_list_level = 0
         for line in md_lines:
-            # Heading h1 to h6 conversion
             heading_level = 0
+            # Heading h1 to h6 conversion
             if line.startswith('#'):
                 heading_level += 1
                 while line[heading_level] == '#':
                     heading_level += 1
                 if line[heading_level] == ' ':
-                    remaining_line = line[heading_level + 1: -1]
+                    remaining_line = line[heading_level + 1:]
                     html.write(
-                        '<h{0}>{1}</h{0}>\n'.format(heading_level,
-                                                    remaining_line)
+                        '<h{0}>\n{1}</h{0}>\n'.format(heading_level,
+                                                      remaining_line)
                     )
                 else:
                     html.write(line)
+            # Unordered list conversion
+            elif line.startswith('- '):
+                if unordered_list_level == 0:
+                    unordered_list_level = 1
+                    html.write('<ul>\n')
+                html.write('<li>\n{}</li>\n'.format(line[2:]))
+            elif not line.startswith('- ') and unordered_list_level == 1:
+                unordered_list_level = 0
+                html.write('</ul>\n')
+            # Normal line
+            else:
+                html.write(line)
+    if (unordered_list_level == 1):
+        with open(html_file, 'a') as html:
+            html.write('</ul>\n')
     exit(0)
 
 
