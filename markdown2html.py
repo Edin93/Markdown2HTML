@@ -78,7 +78,7 @@ def markdown_to_html():
                             j += 1
                         line = line[0: i] + \
                             hashlib.md5(
-                                (line[i + 2: j]).lower().encode('utf-8')
+                                (line[i + 2: j]).lower().encode()
                         ).hexdigest() + line[j + 2:]
                         i += j + 2
                     else:
