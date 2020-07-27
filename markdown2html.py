@@ -114,10 +114,7 @@ def markdown_to_html():
                     ordered_list_level = 0
                     html.write('</ol>\n')
                 if space_free_line != '\n':
-                    if paragraph_level == 0 and (
-                        not line.startswith(
-                            '<bold>') or line.startswith('<em>')
-                    ):
+                    if paragraph_level == 0:
                         paragraph_level = 1
                         html.write('<p>\n')
                     else:
