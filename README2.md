@@ -1,8 +1,11 @@
 # My title
 ## My title2
 # My title3
-#### My title4
-### My title5
+
+guillaume@
+guillaume@### My 
+guillaume@
+guillaume@
 ####My Title6
 - Hello
 - sup
@@ -15,3 +18,15 @@ HHHHHHHHH
 
 I'm a text
 with 2 lines
+
++++++++++++++++++++++++++++++++++++++
+
+- He**l**lo
+- Bye
+
+Hello
+
+I'm **a** text
+with __2 lines__
+
+**Or in bold**

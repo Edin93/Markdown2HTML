@@ -19,10 +19,13 @@ def func():
     with open(md_file) as md_lines, open(html_file, 'w') as html:
         unordered_list_level = 0
         ordered_list_level = 0
+        paragraph_level = 0
         for line in md_lines:
             heading_level = 0
             # Heading h1 to h6 conversion
             if line.startswith('#'):
+                if paragraph_level == 1:
+                    paragraph_level = 0 and html.write('</p>\n')
                 heading_level += 1
                 while line[heading_level] == '#':
                     heading_level += 1
@@ -36,30 +39,50 @@ def func():
                     html.write(line)
             # Unordered list conversion
             elif line.startswith('- '):
+                if paragraph_level == 1:
+                    paragraph_level = 0 and html.write('</p>\n')
                 if unordered_list_level == 0:
                     unordered_list_level = 1
                     html.write('<ul>\n')
                 html.write('<li>\n{}</li>\n'.format(line[2:]))
             # Ordered list conversion
             elif line.startswith('* '):
+                if paragraph_level == 1:
+                    paragraph_level = 0 and html.write('</p>\n')
                 if ordered_list_level == 0:
                     ordered_list_level = 1
                     html.write('<ol>\n')
                 html.write('<li>\n{}</li>\n'.format(line[2:]))
             # Normal line
             else:
+                space_free_line = line.replace(' ', '')
                 if unordered_list_level == 1:
                     unordered_list_level = 0
                     html.write('</ul>\n')
                 elif ordered_list_level == 1:
                     ordered_list_level = 0
                     html.write('</ol>\n')
-                html.write(line)
+                if space_free_line != '\n':
+                    if paragraph_level == 0:
+                        paragraph_level = 1
+                        html.write('<p>\n')
+                    else:
+                        html.write('<br />\n')
+                    html.write(line)
+                elif space_free_line == '\n':
+                    if paragraph_level == 1:
+                        paragraph_level = 0
+                        html.write('</p>\n')
+                    # else:
+                    #     html.write('<br />\n')
+
     with open(html_file, 'a') as html:
         if (unordered_list_level == 1):
             html.write('</ul>\n')
         elif (ordered_list_level == 1):
             html.write('</ol>\n')
+        elif (paragraph_level == 1):
+            html.write('</p>\n')
     exit(0)
 
 
