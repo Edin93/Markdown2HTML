@@ -98,13 +98,6 @@ def markdown_to_html():
                     ordered_list_level = 1
                     html.write('<ol>\n')
                 html.write('<li>\n{}</li>\n'.format(line[2:]))
-            # # bold text conversion
-            # elif line.startswith('**') and line.endswith('**'):
-            #     html.write('<b>{}</b>\n'.format(line[2:-2]))
-            # # em text conversion
-            # elif line.startswith('__') and line.endswith('__'):
-            #     html.write('<em>{}</em>\n'.format(line[2:-2]))
-            # Normal line
             else:
                 space_free_line = line.replace(' ', '')
                 if unordered_list_level == 1:
@@ -124,8 +117,6 @@ def markdown_to_html():
                     if paragraph_level == 1:
                         paragraph_level = 0
                         html.write('</p>\n')
-                    # else:
-                    #     html.write('<br />\n')
 
     with open(html_file, 'a') as html:
         if (unordered_list_level == 1):
