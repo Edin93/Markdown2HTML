@@ -42,11 +42,11 @@ def markdown_to_html():
                     if line[i: i + 2] == '**':
                         if bold_level == 0:
                             bold_level = 1
-                            line = line[0: i] + '<bold>' + line[i + 2:]
+                            line = line[0: i] + '<b>' + line[i + 2:]
                             i += 2
                         else:
                             bold_level = 0
-                            line = line[0: i] + '</bold>' + line[i + 2:]
+                            line = line[0: i] + '</b>' + line[i + 2:]
                             i += 2
                     else:
                         i += 1
@@ -98,12 +98,12 @@ def markdown_to_html():
                     ordered_list_level = 1
                     html.write('<ol>\n')
                 html.write('<li>\n{}</li>\n'.format(line[2:]))
-            # bold text conversion
-            elif line.startswith('**') and line.endswith('**'):
-                html.write('<b>{}</b>\n'.format(line[2:-2]))
-            # em text conversion
-            elif line.startswith('__') and line.endswith('__'):
-                html.write('<em>{}</em>\n'.format(line[2:-2]))
+            # # bold text conversion
+            # elif line.startswith('**') and line.endswith('**'):
+            #     html.write('<b>{}</b>\n'.format(line[2:-2]))
+            # # em text conversion
+            # elif line.startswith('__') and line.endswith('__'):
+            #     html.write('<em>{}</em>\n'.format(line[2:-2]))
             # Normal line
             else:
                 space_free_line = line.replace(' ', '')
