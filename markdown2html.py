@@ -2,6 +2,7 @@
 """
 A script that check the passed arguments.
 """
+import hashlib
 from os import path
 import re
 from sys import argv, exit, stderr
@@ -64,6 +65,40 @@ def markdown_to_html():
                             em_level = 0
                             line = line[0: i] + '</em>' + line[i + 2:]
                             i += 2
+                    else:
+                        i += 1
+            # Convert to MD5 (lowecase the content)
+            if '[[' in line and ']]' in line:
+                # cmd5_level = 0 # Convert to md5 level
+                i = 0
+                while i < len(line):
+                    if line[i: i + 2] == '[[':
+                        j = i + 2
+                        while line[j: j + 2] != ']]':
+                            j += 1
+                        line = line[0: i] + \
+                            hashlib.md5(
+                                (line[i + 2: j]).lower().encode('utf-8')
+                        ).hexdigest() + line[j + 2:]
+                        i += j + 2
+                    else:
+                        i += 1
+            # Convert to MD5 (lowecase the content)
+            if '((' in line and '))' in line:
+                # cmd5_level = 0 # Convert to md5 level
+                i = 0
+                while i < len(line):
+                    if line[i: i + 2] == '((':
+                        j = i + 2
+                        while line[j: j + 2] != '))':
+                            j += 1
+                        oldline = line
+                        line = oldline[0: i]
+                        line += re.sub(
+                            'C', '', oldline[i + 2: j], flags=re.IGNORECASE
+                        )
+                        line += oldline[j + 2:]
+                        i += j + 2
                     else:
                         i += 1
             # Block elements conversion

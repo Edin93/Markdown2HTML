@@ -2,11 +2,22 @@
 """
 A script that check the passed arguments.
 """
-from sys import argv, exit, stderr
 from os import path
+import re
+from sys import argv, exit, stderr
 
 
-def func():
+def contains_bold(line):
+    '''Checks if line contains the markdown bold element.'''
+    return '**' in line
+
+
+def contains_em(line):
+    '''Checks if line contains the markdown em element.'''
+    return '__' in line
+
+
+def markdown_to_html():
     """Verify the passed args."""
     if len(argv) < 3:
         stderr.write('Usage: ./markdown2html.py README.md README.html\n')
@@ -22,6 +33,40 @@ def func():
         paragraph_level = 0
         for line in md_lines:
             heading_level = 0
+            # inline elements conversion
+            # Bold text conversion
+            if contains_bold(line):
+                bold_level = 0
+                i = 0
+                while i < len(line):
+                    if line[i: i + 2] == '**':
+                        if bold_level == 0:
+                            bold_level = 1
+                            line = line[0: i] + '<b>' + line[i + 2:]
+                            i += 2
+                        else:
+                            bold_level = 0
+                            line = line[0: i] + '</b>' + line[i + 2:]
+                            i += 2
+                    else:
+                        i += 1
+            # Em text conversion
+            if contains_em(line):
+                em_level = 0
+                i = 0
+                while i < len(line):
+                    if line[i: i + 2] == '__':
+                        if em_level == 0:
+                            em_level = 1
+                            line = line[0: i] + '<em>' + line[i + 2:]
+                            i += 2
+                        else:
+                            em_level = 0
+                            line = line[0: i] + '</em>' + line[i + 2:]
+                            i += 2
+                    else:
+                        i += 1
+            # Block elements conversion
             # Heading h1 to h6 conversion
             if line.startswith('#'):
                 if paragraph_level == 1:
@@ -53,7 +98,6 @@ def func():
                     ordered_list_level = 1
                     html.write('<ol>\n')
                 html.write('<li>\n{}</li>\n'.format(line[2:]))
-            # Normal line
             else:
                 space_free_line = line.replace(' ', '')
                 if unordered_list_level == 1:
@@ -73,8 +117,6 @@ def func():
                     if paragraph_level == 1:
                         paragraph_level = 0
                         html.write('</p>\n')
-                    # else:
-                    #     html.write('<br />\n')
 
     with open(html_file, 'a') as html:
         if (unordered_list_level == 1):
@@ -87,4 +129,4 @@ def func():
 
 
 if __name__ == "__main__":
-    func()
+    markdown_to_html()
