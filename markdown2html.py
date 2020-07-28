@@ -68,22 +68,22 @@ def markdown_to_html():
                     else:
                         i += 1
             # Convert to MD5 (lowecase the content)
-            if '[[' in line and ']]' in line:
+            # if '[[' in line and ']]' in line:
                 # cmd5_level = 0 # Convert to md5 level
-                i = 0
-                while i < len(line):
-                    if line[i: i + 2] == '[[':
-                        j = i + 2
-                        while line[j: j + 2] != ']]':
-                            j += 1
-                        line = line[0: i] + \
-                            hashlib.md5(
-                                (line[i + 2: j]).lower().encode()
-                        ).hexdigest() + line[j + 2:]
-                        i += j + 2
-                    else:
-                        i += 1
-            # Convert to MD5 (lowecase the content)
+                # i = 0
+                # while i < len(line):
+                #     if line[i: i + 2] == '[[':
+                #         j = i + 2
+                #         while line[j: j + 2] != ']]':
+                #             j += 1
+                #         line = line[0: i] + \
+                #             hashlib.md5(
+                #                 (line[i + 2: j]).lower().encode()
+                #         ).hexdigest() + line[j + 2:]
+                #         i += j + 2
+                #     else:
+                #         i += 1
+                # Convert to MD5 (lowecase the content)
             if '((' in line and '))' in line:
                 # cmd5_level = 0 # Convert to md5 level
                 i = 0
